@@ -26,9 +26,9 @@ void setup() {
   base.addTarget(pos, 0);
 }
 const int16_t STEP  = 200 * 16;
-const float R_WHEEL = 6.4 / 2;            //радиус колеса
-const float R_BASE = 36.5 / 2;            //расстояние между центрами колес (setAngle)
-const float R_BASE_DUGA = 37.4 / 2;       //расстояние между центрами колес (radius_rotation и arc_mov)
+float R_WHEEL = 6.4 / 2;            //радиус колеса
+float R_BASE = 18.8;            //расстояние между центрами колес (setAngle)
+float R_BASE_DUGA = 18.8;       //расстояние между центрами колес (radius_rotation и arc_mov)
 float angle_wheels[2];
 float base_pos[2];  // X Y
 void loop() {
@@ -83,7 +83,7 @@ void loop() {
 
       
       if (type == "mov") {                                      // движение прямо
-        mov(p1 / 10.0);
+        mov(p1 / 100.0);
         while (base.tick()) {           
           
         }
@@ -113,7 +113,7 @@ void loop() {
 
       
       if (type == "arc_mov") {                                  // движение по дуге
-        arc_mov(p1 / 10.0, p2 / 180.0 * PI, p3 == 1);
+        arc_mov(p1 / 100.0, p2 / 180.0 * PI, p3 == 1);
         while (base.tick()) {
           
         }
@@ -132,6 +132,33 @@ void loop() {
       
       if (type == "changea") {                                  // смена разгона
         base.setAcceleration(p1);
+        while (base.tick()) {
+          
+        }
+        Serial.println("e");
+      }
+
+
+      if (type == "cw") {
+        R_WHEEL = p1 / 100.0;
+        while (base.tick()) {
+          
+        }
+        Serial.println("e");
+      }
+
+
+      if (type == "cb") {
+        R_BASE = p1 / 100.0;
+        while (base.tick()) {
+          
+        }
+        Serial.println("e");
+      }
+
+
+      if (type == "cbd") {
+        R_BASE_DUGA = p1 / 100.0;
         while (base.tick()) {
           
         }
@@ -165,8 +192,7 @@ void setAngle(float angle) {
   pos[1] = 0;
 }
 
-void radius_rotation(float angle, bool ty) {
-  angle -= base_angle;
+void radius_rotation(float angle, bool ty) {  
   angle *= R_BASE_DUGA / R_WHEEL;
   int32_t stepper_pos = angle / PI * STEP;
   if (ty) {
